@@ -1,0 +1,68 @@
+version: "3.9"
+
+services:
+  # ----------------------------
+  # Postgres Database
+  # ----------------------------
+  db:
+    image: postgres:15
+    container_name: seamless-db
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres # <-- We create the real DB automatically
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+
+
+  # ----------------------------
+  # API Service (Express + Sequelize)
+  # ----------------------------
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: seamless-api
+    restart: unless-stopped
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    environment:
+      # seamles-auth config
+      AUTH_MODE: server
+      AUTH_SERVER_URL: https://demo.seamlessauth.com
+      SEAMLESS_COOKIE_SIGNING_KEY: devsecretdevsecretdevsecretdev
+      SEAMLESS_SERVICE_TOKEN: local-development-value
+
+      # database config
+      DATABASE_URL: postgres://postgres:postgres@db:5432/seamless
+      DB_NAME: seamless
+
+      NODE_ENV: development
+
+    ports:
+      - "3000:3000"
+
+    command: >
+      sh -c "
+        node scripts/runMigrations.js &&
+        node dist/src/index.js
+      "
+
+
+volumes:
+  db_data:
