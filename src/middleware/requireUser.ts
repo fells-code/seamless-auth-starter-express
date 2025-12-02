@@ -44,7 +44,7 @@ export const requireUser = async (
 
       const seamlessUserData = await getSeamlessUser(
         req,
-        process.env.AUTH_SERVER!
+        process.env.AUTH_SERVER_URL!
       );
 
       if (decodedToken.sub !== seamlessUserData.id) {
