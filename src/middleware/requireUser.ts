@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import type { UserRequest } from "../types";
 import getLogger from "../lib/logger";
 import { getSeamlessUser } from "@seamless-auth/express";
-import { getClientSecret } from "../lib/secretsManager";
+import { getSecret } from "../lib/secretsStore";
 import { User } from "../../models/user";
 
 const logger = getLogger("requireUser");
@@ -12,7 +12,7 @@ const logger = getLogger("requireUser");
 export const requireUser = async (
   req: UserRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const accessToken = req.cookies["api-access"];
 
@@ -23,7 +23,7 @@ export const requireUser = async (
   }
 
   try {
-    const COOKIE_SECRET = await getClientSecret("SEAMLESS_COOKIE_SIGNING_KEY");
+    const COOKIE_SECRET = await getSecret("SEAMLESS_COOKIE_SIGNING_KEY");
 
     if (!COOKIE_SECRET) {
       logger.warn("Missing SEAMLESS_COOKIE_SIGNING_KEY env var!");
@@ -31,7 +31,7 @@ export const requireUser = async (
 
     const decodedToken = jwt.verify(
       accessToken,
-      COOKIE_SECRET
+      COOKIE_SECRET,
     ) as jwt.JwtPayload;
     let user = await User.findOne({
       where: {
@@ -44,12 +44,12 @@ export const requireUser = async (
 
       const seamlessUserData = await getSeamlessUser(
         req,
-        process.env.AUTH_SERVER_URL!
+        process.env.AUTH_SERVER_URL!,
       );
 
       if (decodedToken.sub !== seamlessUserData.id) {
         logger.error(
-          `Supicous activitiy for mismatching ids when creating a seamless portal user from seamless auth. Cookie ID: ${decodedToken.sub}. Seamless ID: ${seamlessUserData}`
+          `Supicous activitiy for mismatching ids when creating a seamless portal user from seamless auth. Cookie ID: ${decodedToken.sub}. Seamless ID: ${seamlessUserData}`,
         );
         return res.status(401).json({ message: "Not allowed" });
       }

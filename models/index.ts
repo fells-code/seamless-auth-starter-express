@@ -2,20 +2,18 @@ import { readdirSync } from "fs";
 import path from "path";
 import { Sequelize } from "sequelize";
 import { fileURLToPath } from "url";
+import getLogger from "../src/lib/logger";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const sequelize = new Sequelize(
-  process.env.DB_NAME!,
-  process.env.DB_USER!,
-  process.env.DB_PASS!,
-  {
-    dialect: "postgres",
-    host: process.env.DB_HOST ?? "localhost",
-    logging: false,
-    port: Number(process.env.DB_PORT),
-  }
-);
+const logger = getLogger("index");
+
+const isProduction = process.env.NODE_ENV === "production";
+const enableDbLogging = !isProduction && process.env.DB_LOGGING === "true";
+
+const sequelize = new Sequelize(process.env.DATABASE_URL ?? "", {
+  logging: enableDbLogging ? (msg) => logger.debug(msg) : false,
+});
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const models: { [key: string]: any } = {};
@@ -30,7 +28,7 @@ export async function initializeModels() {
     files.map(async (file) => {
       const modelModule = await import(path.join(__dirname, file));
       return modelModule.default(sequelize);
-    })
+    }),
   );
 
   for (const model of modelDefs) {

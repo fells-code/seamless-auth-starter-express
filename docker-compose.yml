@@ -43,7 +43,6 @@ services:
 
     environment:
       # seamles-auth config
-      AUTH_MODE: server
       AUTH_SERVER_URL: https://demo.seamlessauth.com
       SEAMLESS_COOKIE_SIGNING_KEY: devsecretdevsecretdevsecretdev
       SEAMLESS_SERVICE_TOKEN: local-development-value

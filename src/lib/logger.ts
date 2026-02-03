@@ -29,11 +29,10 @@ export default function getLogger(moduleName: string): Logger {
   transportsList.push(
     new transports.Console({
       format: combine(timestamp(), logFormat),
-    })
+    }),
   );
 
   if (!isProd) {
-    // Ensure log directory exists
     const logDir = path.resolve("./logs");
     if (!fs.existsSync(logDir)) {
       fs.mkdirSync(logDir, { recursive: true });
@@ -45,7 +44,7 @@ export default function getLogger(moduleName: string): Logger {
         format: combine(timestamp(), logFormat),
         maxsize: 10 * 1024 * 1024, // 10 MB rotate
         maxFiles: 5,
-      })
+      }),
     );
   }
 

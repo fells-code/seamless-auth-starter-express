@@ -1,4 +1,3 @@
-// scripts/ensureDatabase.js
 import pg from "pg";
 import dotenv from "dotenv";
 dotenv.config();
@@ -14,8 +13,6 @@ async function ensureDatabase() {
     process.exit(1);
   }
 
-  // Strip database name from connection string
-  // Example: postgres://user:pass@host:5432/dbname
   const adminUrl = databaseUrl.replace(/\/[^\/]+$/, "/postgres");
 
   const client = new Client({
@@ -26,7 +23,7 @@ async function ensureDatabase() {
     await client.connect();
 
     const exists = await client.query(
-      `SELECT 1 FROM pg_database WHERE datname='${dbName}';`
+      `SELECT 1 FROM pg_database WHERE datname='${dbName}';`,
     );
 
     if (exists.rowCount === 0) {

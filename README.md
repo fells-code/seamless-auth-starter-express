@@ -121,7 +121,6 @@ seamless-auth-starter-express/
 Generated automatically by `create-seamless`:
 
 ```env
-AUTH_MODE=server
 AUTH_SERVER_URL=https://demo.seamlessauth.com
 SEAMLESS_COOKIE_SIGNING_KEY=<generated>
 SEAMLESS_SERVICE_TOKEN=GRAB_FROM_SEAMLESS_AUTH_PORTAL

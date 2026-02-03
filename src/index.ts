@@ -21,29 +21,24 @@ const logger = getLogger("index");
 const app = express();
 
 app.use(express.json());
-app.use(cors({ origin: "https://localhost:5001", credentials: true }));
+app.use(cors({ origin: "http://localhost:5001", credentials: true }));
 
-// ------------------------
-// Seamless Auth Middleware
-// ------------------------
 app.use(
   "/auth",
   createSeamlessAuthServer({
     authServerUrl: process.env.AUTH_SERVER_URL!,
     cookieDomain: "localhost",
-  })
+  }),
 );
 
-// Require session + user info for all private routes
-app.use(requireAuth());
+app.use(
+  requireAuth({
+    cookieSecret: process.env.SEAMLESS_COOKIE_SIGNING_KEY ?? "",
+  }),
+);
 app.use(requireUser);
 
-// ------------------------
-// Routes
-// ------------------------
 app.use("/users", users);
-
-// /beta_users requires beta_user role
 app.use("/beta_users", requireRole("beta_user"), beta);
 
 app.get("/", (_req, res) => res.send("Seamless API is running."));
@@ -53,5 +48,5 @@ const models = await initializeModels();
 await connectToDb(models);
 
 app.listen(PORT, () => {
-  logger.info(`🚀 API running at http://localhost:${PORT}`);
+  logger.info(`API running at http://localhost:${PORT}`);
 });
