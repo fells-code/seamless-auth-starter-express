@@ -23,10 +23,10 @@ export const requireUser = async (
   }
 
   try {
-    const COOKIE_SECRET = await getSecret("SEAMLESS_COOKIE_SIGNING_KEY");
+    const COOKIE_SECRET = await getSecret("COOKIE_SIGNING_KEY");
 
     if (!COOKIE_SECRET) {
-      logger.warn("Missing SEAMLESS_COOKIE_SIGNING_KEY env var!");
+      logger.warn("Missing COOKIE_SIGNING_KEY env var!");
     }
 
     const decodedToken = jwt.verify(

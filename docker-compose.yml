@@ -1,9 +1,6 @@
 version: "3.9"
 
 services:
-  # ----------------------------
-  # Postgres Database
-  # ----------------------------
   db:
     image: postgres:15
     container_name: seamless-db
@@ -27,9 +24,6 @@ services:
       retries: 10
 
 
-  # ----------------------------
-  # API Service (Express + Sequelize)
-  # ----------------------------
   api:
     build:
       context: .
@@ -43,9 +37,9 @@ services:
 
     environment:
       # seamles-auth config
-      AUTH_SERVER_URL: https://demo.seamlessauth.com
-      SEAMLESS_COOKIE_SIGNING_KEY: devsecretdevsecretdevsecretdev
-      SEAMLESS_SERVICE_TOKEN: local-development-value
+      AUTH_SERVER_URL: http://localhost:5312
+      COOKIE_SIGNING_KEY: devsecretdevsecretdevsecretdev
+      API_SERVICE_TOKEN: local-development-value
 
       # database config
       DATABASE_URL: postgres://postgres:postgres@db:5432/seamless

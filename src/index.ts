@@ -33,7 +33,7 @@ app.use(
 
 app.use(
   requireAuth({
-    cookieSecret: process.env.SEAMLESS_COOKIE_SIGNING_KEY ?? "",
+    cookieSecret: process.env.COOKIE_SIGNING_KEY ?? "",
   }),
 );
 app.use(requireUser);

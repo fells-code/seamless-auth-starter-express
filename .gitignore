@@ -21,6 +21,7 @@ coverage/
 .env.local
 .env.*.local
 .env*
+!.env.example
 
 # Prevent Secrets from accidental upload
 # (SeamlessAuth tokens, cookie signing keys, etc.)

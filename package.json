@@ -16,8 +16,7 @@
         "prepare": "husky"
     },
     "dependencies": {
-        "@aws-sdk/client-secrets-manager": "^3.936.0",
-        "@seamless-auth/express": "0.0.1",
+        "@seamless-auth/express": "0.0.2-beta.8",
         "cors": "^2.8.5",
         "dotenv": "^16.6.1",
         "express": "^5.1.0",

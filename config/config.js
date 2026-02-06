@@ -2,17 +2,17 @@ const config = {
   development: {
     dialect: "postgres",
     use_env_variable: "DATABASE_URL",
-    logging: "false",
+    logging: false,
   },
   test: {
     dialect: "postgres",
     use_env_variable: "DATABASE_URL",
-    logging: "false",
+    logging: false,
   },
   production: {
     dialect: "postgres",
     use_env_variable: "DATABASE_URL",
-    logging: "false",
+    logging: false,
   },
 };
 

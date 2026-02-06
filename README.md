@@ -122,11 +122,12 @@ Generated automatically by `create-seamless`:
 
 ```env
 AUTH_SERVER_URL=https://demo.seamlessauth.com
-SEAMLESS_COOKIE_SIGNING_KEY=<generated>
+COOKIE_SIGNING_KEY=<generated>
 SEAMLESS_SERVICE_TOKEN=GRAB_FROM_SEAMLESS_AUTH_PORTAL
 
 DATABASE_URL=postgres://postgres:postgres@localhost:5432/seamless
 DB_NAME=seamless
+SQL_LOGGING=false
 ```
 
 ---
