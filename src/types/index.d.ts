@@ -1,5 +1,7 @@
-import { Request } from "express";
-
-export interface UserRequest extends Request {
-  user?: User;
+declare global {
+  namespace Express {
+    interface Request {
+      user?: SeamlessAuthUser;
+    }
+  }
 }

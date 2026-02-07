@@ -8,7 +8,6 @@ import createSeamlessAuthServer, {
 import { connectToDb } from "./db";
 import { initializeModels } from "../models";
 
-import users from "./routes/users.js";
 import beta from "./routes/beta.js";
 import { requireUser } from "./middleware/requireUser";
 import getLogger from "./lib/logger";
@@ -38,7 +37,6 @@ app.use(
 );
 app.use(requireUser);
 
-app.use("/users", users);
 app.use("/beta_users", requireRole("beta_user"), beta);
 
 app.get("/", (_req, res) => res.send("Seamless API is running."));

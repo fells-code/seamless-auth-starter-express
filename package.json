@@ -12,8 +12,7 @@
         "docker:up": "docker-compose up --build",
         "docker:down": "docker-compose down -v",
         "docker:logs": "docker-compose logs -f api",
-        "lint": "npx eslint src",
-        "prepare": "husky"
+        "lint": "npx eslint src"
     },
     "dependencies": {
         "@seamless-auth/express": "0.0.2-beta.8",
@@ -36,7 +35,6 @@
         "@types/sequelize": "^4.28.20",
         "eslint": "^9.39.1",
         "globals": "^16.5.0",
-        "husky": "^9.1.7",
         "jiti": "^2.6.1",
         "nodemon": "^3.0.1",
         "sequelize-cli": "^6.6.3",

@@ -1,7 +1,6 @@
-import type { NextFunction, Response } from "express";
+import type { Request, NextFunction, Response } from "express";
 import jwt from "jsonwebtoken";
 
-import type { UserRequest } from "../types";
 import getLogger from "../lib/logger";
 import { getSeamlessUser } from "@seamless-auth/express";
 import { getSecret } from "../lib/secretsStore";
@@ -10,7 +9,7 @@ import { User } from "../../models/user";
 const logger = getLogger("requireUser");
 
 export const requireUser = async (
-  req: UserRequest,
+  req: Request,
   res: Response,
   next: NextFunction,
 ) => {
@@ -69,7 +68,6 @@ export const requireUser = async (
       }
     }
 
-    req.user = user;
     next();
     return;
   } catch (error) {
