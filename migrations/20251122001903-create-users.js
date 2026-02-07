@@ -17,28 +17,15 @@ export async function up(queryInterface, Sequelize) {
       allowNull: false,
       unique: true,
     },
-    createdAt: {
+    created_at: {
       allowNull: false,
       type: Sequelize.DATE,
       defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
     },
-    updatedAt: {
+    updated_at: {
       allowNull: false,
       type: Sequelize.DATE,
       defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
-    },
-  });
-
-  await queryInterface.createTable("waitlist", {
-    id: {
-      type: Sequelize.STRING,
-      primaryKey: true,
-      allowNull: false,
-    },
-    email: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      unique: true,
     },
   });
 }

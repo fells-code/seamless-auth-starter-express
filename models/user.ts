@@ -5,22 +5,16 @@ export interface UserAttributes {
   id?: string;
   email: string;
   phone: string;
-  firstName?: string;
-  lastName?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-  seamlessAuthUid: string;
+  created_at?: Date;
+  updatedA_a?: Date;
 }
 
 export class User extends Model<UserAttributes> implements UserAttributes {
   public id!: string;
   public email!: string;
   public phone!: string;
-  public firstName?: string;
-  public lastName?: string;
-  public seamlessAuthUid!: string;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public readonly created_at!: Date;
+  public readonly updated_at!: Date;
 }
 
 const initializeUserModel = (sequelize: Sequelize) => {
@@ -44,25 +38,14 @@ const initializeUserModel = (sequelize: Sequelize) => {
         unique: true,
         allowNull: false,
       },
-      firstName: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      lastName: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      seamlessAuthUid: {
-        type: DataTypes.UUID,
-        allowNull: false,
-      },
     },
     {
       sequelize,
       modelName: "User",
       tableName: "users",
       underscored: true,
-    }
+      timestamps: true,
+    },
   );
 
   return User;

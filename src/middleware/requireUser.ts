@@ -1,79 +1,58 @@
 import type { Request, NextFunction, Response } from "express";
-import jwt from "jsonwebtoken";
 
 import getLogger from "../lib/logger";
 import { getSeamlessUser } from "@seamless-auth/express";
-import { getSecret } from "../lib/secretsStore";
 import { User } from "../../models/user";
 
 const logger = getLogger("requireUser");
 
-export const requireUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const accessToken = req.cookies["api-access"];
+export interface RequireUserOptions {
+  cookieSecret: string;
+  authServerUrl: string;
+  cookieName?: string;
+}
 
-  if (!accessToken) {
-    logger.error(`Failed to validate, missing access token`);
-    res.status(401).json({ message: "Not allowed." });
-    return;
-  }
+export const requireUser =
+  (opts: RequireUserOptions) =>
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const seamlessUser = await getSeamlessUser(req, opts);
 
-  try {
-    const COOKIE_SECRET = await getSecret("COOKIE_SIGNING_KEY");
+      if (!seamlessUser) {
+        logger.warn("Failed to resolve Seamless Auth user");
+        return res.status(401).json({ message: "Not allowed." });
+      }
 
-    if (!COOKIE_SECRET) {
-      logger.warn("Missing COOKIE_SIGNING_KEY env var!");
-    }
+      console.log(seamlessUser);
 
-    const decodedToken = jwt.verify(
-      accessToken,
-      COOKIE_SECRET,
-    ) as jwt.JwtPayload;
-    let user = await User.findOne({
-      where: {
-        seamlessAuthUid: decodedToken.sub,
-      },
-    });
+      let user = await User.findOne({
+        where: { id: seamlessUser.id },
+      });
 
-    if (!user) {
-      logger.info(`No user found for ${decodedToken.sub}. Creating user.`);
-
-      const seamlessUserData = await getSeamlessUser(
-        req,
-        process.env.AUTH_SERVER_URL!,
-      );
-
-      if (decodedToken.sub !== seamlessUserData.id) {
-        logger.error(
-          `Supicous activitiy for mismatching ids when creating a seamless portal user from seamless auth. Cookie ID: ${decodedToken.sub}. Seamless ID: ${seamlessUserData}`,
+      if (!user) {
+        logger.info(
+          `No local user found for ${seamlessUser.sub}. Creating user.`,
         );
-        return res.status(401).json({ message: "Not allowed" });
+
+        try {
+          user = await User.create({
+            id: seamlessUser.sub,
+            email: seamlessUser.email.toLowerCase(),
+            phone: seamlessUser.phone,
+          });
+        } catch (error) {
+          logger.error("Error creating local user", error);
+          return res.status(400).json({
+            message: "Failed to create user",
+          });
+        }
       }
 
-      try {
-        user = await User.create({
-          email: seamlessUserData.email.toLowerCase(),
-          phone: seamlessUserData.phone,
-          seamlessAuthUid: seamlessUserData.id,
-        });
-      } catch (error) {
-        logger.error(`An error occured creating a user ${error}`);
-        res
-          .status(400)
-          .json({ message: "Failed to get user information", user: {} });
-        return;
-      }
+      req.appUser = user;
+
+      next();
+    } catch (error) {
+      logger.error("requireUser failed", error);
+      res.status(401).json({ message: "Not allowed" });
     }
-
-    next();
-    return;
-  } catch (error) {
-    logger.error("Failed to validate internal JWT token. Error: ", error);
-  }
-
-  res.status(401).json({ message: "Not allowed" });
-  return;
-};
+  };
