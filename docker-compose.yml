@@ -36,13 +36,14 @@ services:
         condition: service_healthy
 
     environment:
-      # seamles-auth config
       AUTH_SERVER_URL: http://localhost:5312
       COOKIE_SIGNING_KEY: devsecretdevsecretdevsecretdev
       API_SERVICE_TOKEN: local-development-value
 
-      # database config
-      DATABASE_URL: postgres://postgres:postgres@db:5432/seamless
+      DB_HOST: localhost
+      DB_PORT: 5432
+      DB_USER: myuser
+      DB_PASSWORD: mypassword
       DB_NAME: seamless
 
       NODE_ENV: development
@@ -55,7 +56,6 @@ services:
         node scripts/runMigrations.js &&
         node dist/src/index.js
       "
-
 
 volumes:
   db_data:

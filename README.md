@@ -14,18 +14,18 @@ Everything included in this template is optimized for:
 
 ---
 
-## 🚀 Features
+## Features
 
 This starter is packed with modern API features that make building secure SaaS apps easier and faster.
 
-### 🔥 Seamless Auth (Server Mode)
+### Seamless Auth (Server Mode)
 
 - Zero-redirect, passwordless authentication
 - Cookie-based session validation
 - Role-based access (`requireRole("beta_user")`)
 - Automatic user resolution (`req.user`)
 
-### 🗄️ Sequelize ORM
+### Sequelize ORM
 
 - Postgres integration
 - Auto-database creation on boot
@@ -33,30 +33,30 @@ This starter is packed with modern API features that make building secure SaaS a
 - `User` model (id, email, roles[])
 - `Waitlist` model for private beta or email list capture
 
-### 📬 Waitlist API
+### Waitlist API
 
 - `POST /waitlist` → Add waitlist entry
 - `GET /waitlist/count` → Get total entries
 
-### 👤 User API
+### User API
 
 - `POST /users` → Create a user
 - `GET /users` → Fetch all users
 - `POST /users/:id/role` → Assign a role
 
-### 🔐 Beta-Only API
+### Beta-Only API
 
 - `GET /beta_users`
 - Only users with `"beta_user"` role can access it
 
-### 🐳 Docker-Ready
+### Docker-Ready
 
 - Multi-stage Dockerfile (distroless runtime)
 - docker-compose for local PG + API
 - Auto-start database
 - Auto-run migrations
 
-### 🧪 DX Enhancements
+### DX Enhancements
 
 - Nodemon + ts-node/esm dev experience
 - Automatic environment loading
@@ -64,7 +64,7 @@ This starter is packed with modern API features that make building secure SaaS a
 - Automatic migrations
 - Clean modular architecture
 
-### 🛠 Tooling
+### Tooling
 
 - ESLint + Prettier
 - Husky pre-commit hooks
@@ -73,7 +73,7 @@ This starter is packed with modern API features that make building secure SaaS a
 
 ---
 
-## 📁 Directory Structure
+## Directory Structure
 
 ```
 seamless-auth-starter-express/
@@ -86,8 +86,7 @@ seamless-auth-starter-express/
 │
 ├── models/ → Sequelize models
 │ ├── index.js → Model loader
-│ ├── user.js → User model
-│ └── waitlist.js → Waitlist model
+│ └── user.js → User model
 │
 ├── scripts/
 │ ├── ensureDatabase.js → Creates DB if missing
@@ -116,23 +115,26 @@ seamless-auth-starter-express/
 
 ---
 
-## 🔧 Environment Variables
+## Environment Variables
 
 Generated automatically by `create-seamless`:
 
 ```env
-AUTH_SERVER_URL=https://demo.seamlessauth.com
+AUTH_SERVER_URL=http://localhost:5312
 COOKIE_SIGNING_KEY=<generated>
 SEAMLESS_SERVICE_TOKEN=GRAB_FROM_SEAMLESS_AUTH_PORTAL
 
-DATABASE_URL=postgres://postgres:postgres@localhost:5432/seamless
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=myuser
+DB_PASSWORD=mypassword
 DB_NAME=seamless
 SQL_LOGGING=false
 ```
 
 ---
 
-## ▶️ Running Locally
+## Running Locally
 
 ### Install dependencies
 
@@ -158,7 +160,7 @@ http://localhost:3000
 
 ---
 
-## 🐳 Running via Docker
+## Running via Docker
 
 ```bash
 docker-compose up --build
@@ -172,7 +174,7 @@ docker-compose down -v
 
 ---
 
-## 🧪 API Endpoints
+## API Endpoints
 
 ### Users
 
@@ -181,15 +183,6 @@ docker-compose down -v
 | POST   | `/users`          | Create new user       |
 | GET    | `/users`          | List all users        |
 | POST   | `/users/:id/role` | Assign role to a user |
-
----
-
-### Waitlist
-
-| Method | Route             | Description           |
-| ------ | ----------------- | --------------------- |
-| POST   | `/waitlist`       | Add waitlist entry    |
-| GET    | `/waitlist/count` | Get number of entries |
 
 ---
 
@@ -207,9 +200,9 @@ app.use("/beta_users", requireRole("beta_user"), betaRoute);
 
 ---
 
-## 💎 Developer Experience Highlights
+## Developer Experience Highlights
 
-### ✨ Auto-DB Creation
+### Auto-DB Creation
 
 Works locally and in AWS RDS:
 
@@ -217,7 +210,7 @@ Works locally and in AWS RDS:
 node scripts/ensureDatabase.js
 ```
 
-### ✨ Auto-Migrations
+### Auto-Migrations
 
 Every dev / prod boot runs:
 
@@ -231,17 +224,17 @@ node scripts/runMigrations.js
 - ts-node/esm for dev
 - First-class module support
 
-### ✨ Sequelize ORM
+### Sequelize ORM
 
 Familiar API for Node developers.
 
-### ✨ Docker + Terraform Ready
+### Docker + Terraform Ready
 
 Matches the target arch for AWS ECS + RDS.
 
 ---
 
-## 🧹 Linting, Formatting & Precommit Hooks
+## Linting, Formatting & Precommit Hooks
 
 ### Install tooling:
 
@@ -318,7 +311,7 @@ This ensures:
 
 ---
 
-## 🎉 You're Ready for Production & AWS
+## You're Ready for Production & AWS
 
 This starter already includes:
 
@@ -334,7 +327,7 @@ This starter already includes:
 
 It can be deployed today to:
 
-- AWS ECS + Fargate
+- AWS ECS/EKS
 - AWS RDS Postgres
 - CloudFront + ALB
 - Fly.io
