@@ -29,7 +29,7 @@ const seamlessAuthOptions: SeamlessAuthServerOptions = {
 };
 
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:5001", credentials: true }));
+app.use(cors({ origin: process.env.UI_ORIGIN, credentials: true }));
 app.use(cookieParser());
 
 app.use("/auth", createSeamlessAuthServer(seamlessAuthOptions));
