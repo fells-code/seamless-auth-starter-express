@@ -14,10 +14,8 @@ async function ensureDatabase() {
     process.exit(1);
   }
 
-  const adminUrl = DATABASE_URL.replace(/\/[^\/]+$/, "/postgres");
-
   const client = new Client({
-    connectionString: adminUrl,
+    connectionString: DATABASE_URL,
   });
 
   try {

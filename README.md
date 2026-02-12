@@ -31,18 +31,6 @@ This starter is packed with modern API features that make building secure SaaS a
 - Auto-database creation on boot
 - Auto-migration execution in dev & prod
 - `User` model (id, email, roles[])
-- `Waitlist` model for private beta or email list capture
-
-### Waitlist API
-
-- `POST /waitlist` → Add waitlist entry
-- `GET /waitlist/count` → Get total entries
-
-### User API
-
-- `POST /users` → Create a user
-- `GET /users` → Fetch all users
-- `POST /users/:id/role` → Assign a role
 
 ### Beta-Only API
 
@@ -94,11 +82,9 @@ seamless-auth-starter-express/
 │
 ├── src/
 │ ├── controllers/
-│ │ ├── users.controller.ts
 │ │ └── beta.controller.ts
 │ │
 │ ├── routes/
-│ │ ├── users.ts
 │ │ └── beta.ts
 │ │
 │ ├── middleware/
@@ -128,7 +114,7 @@ DB_HOST=localhost
 DB_PORT=5432
 DB_USER=myuser
 DB_PASSWORD=mypassword
-DB_NAME=seamless
+DB_NAME=seamless_api
 SQL_LOGGING=false
 ```
 
@@ -176,16 +162,6 @@ docker-compose down -v
 
 ## API Endpoints
 
-### Users
-
-| Method | Route             | Description           |
-| ------ | ----------------- | --------------------- |
-| POST   | `/users`          | Create new user       |
-| GET    | `/users`          | List all users        |
-| POST   | `/users/:id/role` | Assign role to a user |
-
----
-
 ### Beta Access (Role Protected)
 
 | Method | Route         | Description                   |
@@ -218,7 +194,7 @@ Every dev / prod boot runs:
 node scripts/runMigrations.js
 ```
 
-### ✨ Modern ESM + TypeScript
+### Modern ESM + TypeScript
 
 - Native Node 18+ features
 - ts-node/esm for dev
@@ -317,7 +293,6 @@ This starter already includes:
 
 - Sequelize ORM
 - Auto migrations
-- Waitlist + User APIs
 - Role-based auth
 - Docker-ready builds
 - Distroless images
