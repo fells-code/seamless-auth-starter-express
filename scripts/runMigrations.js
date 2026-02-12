@@ -5,8 +5,6 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-execSync("node ./scripts/ensureDatabase.js", { stdio: "inherit" });
-
 // Use compiled migrations in production, source in dev
 const isProd = process.env.NODE_ENV === "production";
 const configPath = isProd
