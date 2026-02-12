@@ -23,20 +23,18 @@ export const requireUser =
         return res.status(401).json({ message: "Not allowed." });
       }
 
-      console.log(seamlessUser);
-
       let user = await User.findOne({
         where: { id: seamlessUser.id },
       });
 
       if (!user) {
         logger.info(
-          `No local user found for ${seamlessUser.sub}. Creating user.`,
+          `No local user found for ${seamlessUser.id}. Creating user.`,
         );
 
         try {
           user = await User.create({
-            id: seamlessUser.sub,
+            id: seamlessUser.id,
             email: seamlessUser.email.toLowerCase(),
             phone: seamlessUser.phone,
           });
