@@ -62,12 +62,7 @@ app.use(
   }),
 );
 
-app.use(
-  requireUser({
-    cookieSecret: seamlessAuthOptions.cookieSecret,
-    authServerUrl: seamlessAuthOptions.authServerUrl,
-  }),
-);
+app.use(requireUser(seamlessAuthOptions));
 app.use("/beta_users", requireRole("betaUser"), beta);
 app.get("/", (_req, res) => res.send("Seamless API is running."));
 

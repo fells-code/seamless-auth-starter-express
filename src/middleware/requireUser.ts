@@ -1,19 +1,16 @@
 import type { Request, NextFunction, Response } from "express";
 
 import getLogger from "../lib/logger";
-import { getSeamlessUser } from "@seamless-auth/express";
+import {
+  getSeamlessUser,
+  SeamlessAuthServerOptions,
+} from "@seamless-auth/express";
 import { User } from "../../models/user";
 
 const logger = getLogger("requireUser");
 
-export interface RequireUserOptions {
-  cookieSecret: string;
-  authServerUrl: string;
-  cookieName?: string;
-}
-
 export const requireUser =
-  (opts: RequireUserOptions) =>
+  (opts: SeamlessAuthServerOptions) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const seamlessUser = await getSeamlessUser(req, opts);
