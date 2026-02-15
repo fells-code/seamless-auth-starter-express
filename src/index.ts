@@ -46,8 +46,9 @@ const seamlessAuthOptions: SeamlessAuthServerOptions = {
   serviceSecret: process.env.API_SERVICE_TOKEN!,
   issuer: process.env.APP_ORIGIN!,
   audience: process.env.AUTH_SERVER_URL!,
-  jwksKid: process.env.JWKS_ACTIVE_KID!,
-  cookieDomain: "localhost",
+  jwksKid: process.env.JWKS_KID!,
+  cookieDomain:
+    process.env.NODE_ENV === "production" ? ".yourSite.com" : undefined,
 };
 
 app.use(express.json());
