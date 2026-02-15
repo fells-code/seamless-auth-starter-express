@@ -7,7 +7,7 @@
         "dev": "NODE_ENV=development node scripts/runMigrations.js && tsx watch src/index.ts",
         "build": "tsc -p .",
         "start": "NODE_ENV=production node scripts/runMigrations.js && node dist/src/index.js",
-        "db:create": "node scripts/ensureDatabase.js",
+        "db:create": "sequelize-cli db:create",
         "migrate": "sequelize-cli db:migrate --config config/config.js",
         "docker:up": "docker-compose up --build",
         "docker:down": "docker-compose down -v",
