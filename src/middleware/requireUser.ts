@@ -20,32 +20,33 @@ export const requireUser =
         return res.status(401).json({ message: "Not allowed." });
       }
 
-      let user = await User.findOne({
-        where: { id: seamlessUser.id },
-      });
-
-      if (!user) {
-        logger.info(
-          `No local user found for ${seamlessUser.id}. Creating user.`,
-        );
-
-        try {
-          user = await User.create({
-            id: seamlessUser.id,
+      try {
+        const [user] = await User.findOrCreate({
+          where: { id: seamlessUser.id },
+          defaults: {
             email: seamlessUser.email.toLowerCase(),
             phone: seamlessUser.phone,
+          },
+        });
+
+        req.appUser = user;
+        next();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
+        if (error.name === "SequelizeUniqueConstraintError") {
+          const existingUser = await User.findOne({
+            where: { id: seamlessUser.id },
           });
-        } catch (error) {
-          logger.error("Error creating local user", error);
-          return res.status(400).json({
-            message: "Failed to create user",
-          });
+
+          if (existingUser) {
+            req.appUser = existingUser;
+            return next();
+          }
         }
+
+        logger.error("Error creating local user", error);
+        return res.status(400).json({ message: "Failed to create user" });
       }
-
-      req.appUser = user;
-
-      next();
     } catch (error) {
       logger.error("requireUser failed", error);
       res.status(401).json({ message: "Not allowed" });
